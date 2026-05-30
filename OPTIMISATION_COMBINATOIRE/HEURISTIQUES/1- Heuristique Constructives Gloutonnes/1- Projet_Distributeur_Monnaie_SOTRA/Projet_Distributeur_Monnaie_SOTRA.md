@@ -59,29 +59,17 @@ Avant de coder, formaliser le problème :
 
 ```
 Entrées :
-  - tickets = {tk₁, tk₂, ...., tkₖ} = la liste des tickets
-  - P = prix du/des ticket(s)
+  - P = prix du ticket
   - V = montant versé par le client
   - D = {d₁, d₂, ..., dₖ} = ensemble des coupures triées par ordre décroissant
 
 Sortie :
-  - M = montant a rendre 
   - X = {x₁, x₂, ..., xₖ} où xᵢ = nombre de coupures dᵢ utilisées
 ```
 
-#### Étape 1.2 : Calculer 
+#### Étape 1.2 : Calculer le montant à rendre
 
 ```
-***le prix des tickets***
-
-     k
-P =  Σ  tkᵢ *  nᵢ       
-    i=1
-
-avec   tkᵢ = representant les tickets et  nᵢ le nombre de fois choisi
-
-
-***le montant à rendre***
 M = V - P
 
 Si M < 0 → ERREUR : montant insuffisant
@@ -107,10 +95,7 @@ s.c. :
 #### Étape 1.4 : Résoudre un exemple à la main
 
 ```
-Exemple :
-P = 2 000 * 2  +  1 000 * 1 +  500 * 2 + 250 * 1 = 6250
-V = 10 000
-M = 10 000 - 6250 =  3 750 FCFA
+Exemple : M = 3 750 FCFA
 Coupures : {10000, 5000, 2000, 1000, 500, 200, 100, 50, 25, 10, 5}
 
 Étape 1 : 10000 > 3750 → x₁ = 0, reste = 3750
@@ -126,6 +111,7 @@ Solution : 1×2000 + 1×1000 + 1×500 + 1×200 + 1×50 = 3750 ✅
 Nombre de coupures : 5
 ```
 
+> ✅ Ne passe à la Phase 2 que si tu obtiens les bons résultats à la main.
 
 ---
 
@@ -151,28 +137,20 @@ DÉBUT
     Z ← 0
 
     POUR i DE 1 À k FAIRE
-        SI D[i] >= reste 
+        X[i] ← reste DIV D[i]         // division entière
+        reste ← reste - X[i] × D[i]   // mise à jour du reste
+        Z ← Z + X[i]                  // compteur total
 
-            X[i] ← reste DIV D[i]         // division entière
-            reste ← reste - X[i] × D[i]   // mise à jour du reste
-            Z ← Z + X[i]                  // compteur total
-
-          SINON 
-
-            X[i] ← 0 
-
-          FIN SINON 
-
-          SI reste = 0 ALORS
+        SI reste = 0 ALORS
             SORTIR DE LA BOUCLE        // terminé
-          FIN SI
-
         FIN SI
-
-
     FIN POUR
 
-    RETOURNE X
+    SI reste ≠ 0 ALORS
+        AFFICHER "Impossible de rendre exactement"
+    SINON
+        AFFICHER solution X et total Z
+    FIN SI
 FIN
 ```
 
@@ -206,7 +184,6 @@ FIN
 ```
 Structures nécessaires :
   - Tableau/Liste pour les coupures D
-  - Dictionnaire pour les tckets (trajet et prix)
   - Tableau/Liste pour les quantités X (même taille que D)
   - Variables simples : M (montant), reste, Z (total coupures)
 
